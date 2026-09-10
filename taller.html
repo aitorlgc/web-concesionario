@@ -21,6 +21,14 @@
 <link rel="stylesheet" href="assets/css/car.css">
 <link rel="stylesheet" href="assets/css/sections.css">
 <link rel="stylesheet" href="assets/css/pages.css">
+<script>
+  // Aplica el tema antes de pintar para evitar el parpadeo
+  try{
+    var t = JSON.parse(localStorage.getItem('hm-theme'));
+    if (t === 'dia') document.documentElement.setAttribute('data-theme','dia');
+    if (sessionStorage.getItem('hm-wipe') === '1') document.documentElement.dataset.wipeIn = '1';
+  }catch(e){}
+</script>
 </head>
 <body>
 

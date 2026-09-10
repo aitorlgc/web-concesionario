@@ -13,23 +13,23 @@
 .carsvg .c-line--soft{stroke:rgba(0,0,0,.2);stroke-width:1.2;}
 .carsvg .c-chrome{fill:rgba(0,0,0,.42);}
 .carsvg .c-mirror{fill:var(--car-body,#DEDDD7);stroke:rgba(0,0,0,.5);stroke-width:1.2;stroke-linejoin:round;}
-.carsvg .c-light{fill:rgba(255,255,255,.82);stroke:rgba(0,0,0,.45);stroke-width:1.1;}
+.carsvg .c-light{fill:rgba(232,240,250,.9);stroke:rgba(0,0,0,.5);stroke-width:1.1;}
 .carsvg .c-light--rear{fill:#D8241C;}
 .carsvg .c-exhaust{fill:#2A2F38;stroke:rgba(255,255,255,.22);stroke-width:1.2;}
 .carsvg .c-aero{fill:#14171C;}
 .carsvg .c-dim{fill:none;stroke:var(--data);stroke-width:1;}
 .carsvg .c-dim text{fill:var(--data);font-family:var(--f-mono);font-size:13px;letter-spacing:.14em;stroke:none;}
 
-.carsvg .cw-tyre{fill:#0E1116;}
-.carsvg .cw-tyre-w{fill:none;stroke:#242A33;stroke-width:2;stroke-dasharray:5 4;}
+.carsvg .cw-tyre{fill:#0D1015;stroke:#2C333E;stroke-width:2.2;}
+.carsvg .cw-tyre-w{fill:none;stroke:#39414D;stroke-width:2;stroke-dasharray:6 5;}
 .carsvg .cw-disc{fill:#4A525E;}
 .carsvg .cw-disc-in{fill:none;stroke:#5D6572;stroke-width:1.4;stroke-dasharray:3 5;}
 .carsvg .cw-caliper{fill:var(--signal);}
-.carsvg .cw-rim{fill:#9AA1AC;}
-.carsvg .cw-lip{fill:none;stroke:#8A919C;stroke-width:2.4;}
+.carsvg .cw-rim{fill:#5E6570;}
+.carsvg .cw-lip{fill:none;stroke:#CBD2DB;stroke-width:2.6;}
 .carsvg .cw-hub{fill:#20252D;}
-.carsvg .cw-spoke{fill:#C3C9D2;}
-.carsvg .cw-spoke-l{stroke:#C3C9D2;stroke-linecap:round;fill:none;}
+.carsvg .cw-spoke{fill:#AEB6C1;}
+.carsvg .cw-spoke-l{stroke:#AEB6C1;stroke-linecap:round;fill:none;}
 .carsvg .cw-mesh{fill:none;stroke:#9AA2AD;stroke-width:1.6;}
 
 /* Variante “plano técnico”: sólo trazo */
@@ -72,3 +72,14 @@ html[data-theme="dia"] .carsvg--blueprint .c-glass path{fill:rgba(18,70,122,.10)
 html[data-theme="dia"] .carsvg--blueprint .cw-tyre{fill:rgba(255,255,255,.5);}
 html[data-theme="dia"] .carsvg .c-outline{stroke:rgba(0,0,0,.65);}
 html[data-theme="dia"] .carsvg .cw-tyre{fill:#22262C;}
+
+/* Ruedas girando (se activa al dar gas) */
+.carsvg .cw-rot{transform-box:fill-box;transform-origin:center;}
+.carsvg.is-rolling .cw-rot{animation:wheelSpin var(--spin,.42s) linear infinite;}
+@keyframes wheelSpin{to{transform:rotate(360deg);}}
+@media (prefers-reduced-motion:reduce){ .carsvg.is-rolling .cw-rot{animation:none;} }
+
+.carsvg .c-rim{fill:none;stroke:rgba(255,255,255,.45);stroke-width:1.6;stroke-linecap:round;}
+.carsvg .c-lightEdge{fill:none;stroke:rgba(255,255,255,.9);stroke-width:2;stroke-linecap:round;}
+.carsvg--blueprint .c-rim,.carsvg--blueprint .c-lightEdge{display:none;}
+html[data-theme="dia"] .carsvg .c-rim{stroke:rgba(255,255,255,.7);}

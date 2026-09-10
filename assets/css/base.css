@@ -5,11 +5,12 @@
 *,*::before,*::after{box-sizing:border-box;}
 *{margin:0;padding:0;}
 html{
+  background:#08090C;
   -webkit-text-size-adjust:100%;
   scroll-behavior:smooth;
   color-scheme:dark;
 }
-html[data-theme="dia"]{color-scheme:light;}
+html[data-theme="dia"]{color-scheme:light;background:#DEDDD8;}
 html.is-locked,body.is-locked{overflow:hidden;}
 
 body{

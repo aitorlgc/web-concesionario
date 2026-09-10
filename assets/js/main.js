@@ -14,10 +14,12 @@ import { initMagnet }    from './modules/magnet.js';
 import { initHUD }       from './modules/hud.js';
 import { initSound, rev } from './modules/sound.js';
 import { initKonami }    from './modules/konami.js';
+import { initTransition, flagIncoming } from './modules/transition.js';
 
 export const app = { hero:null };
 
 export async function boot(pageInit){
+  flagIncoming();
   initTheme();
   initCursor();
   initNav();
@@ -26,6 +28,7 @@ export async function boot(pageInit){
   initSound();
   initHUD();
   initKonami(() => rev({ peak:8200, up:.9, down:1.4, gain:.45 }));
+  initTransition();
 
   // El módulo de página puede devolver una promesa
   const pending = pageInit ? pageInit() : null;

@@ -280,7 +280,7 @@ function glassPaths(c, g){
   const wsFrontX = g.cowlX + mm(40);
   const aPost   = mm(120);
   const dloF    = g.roofFX + aPost;
-  const dloR    = g.roofRX - mm(60);
+  const dloR    = g.roofRX - mm(170);
   const bTop    = dloF + (dloR - dloF) * (c.doors === 4 ? .40 : .54);
   const bBot    = bTop - mm(210);
   const gap     = mm(26);
@@ -313,12 +313,13 @@ function glassPaths(c, g){
 
   const kink = `M ${f(dloR)} ${f(roofG)} L ${f(kinkMx)} ${f(bK - mm(150))} L ${f(kinkX)} ${f(bK)}`;
 
-  // Luneta
-  const blF = dloR + mm(50);
-  const bl = `M ${f(blF)} ${f(roofG)}
-    L ${f(g.roofRX + (g.deckX - g.roofRX) * .80)} ${f(g.tailTopY + mm(80))}
-    L ${f(g.roofRX + (g.deckX - g.roofRX) * .30)} ${f(g.tailTopY + mm(115))}
-    L ${f(blF - mm(230))} ${f(roofG)} Z`;
+  // Luneta: en perfil se ve casi de canto, como una banda estrecha
+  const blTop = g.roofRX - mm(20);
+  const blBot = g.deckX - mm(60);
+  const bl = `M ${f(blTop)} ${f(roofG)}
+    L ${f(blBot)} ${f(g.tailTopY + mm(46))}
+    L ${f(blBot - mm(150))} ${f(g.tailTopY + mm(74))}
+    L ${f(blTop - mm(130))} ${f(roofG)} Z`;
 
   return { ws, win1, win2, kink, bl, bTop, bBot, dloF, dloR, roofG, bF };
 }
@@ -369,14 +370,16 @@ function wheel(c, g, cx, front){
 
   return `<g class="cw">
     <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(R)}" class="cw-tyre"/>
-    <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(R * .985)}" class="cw-tyre-w"/>
     <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(dR)}" class="cw-disc"/>
     <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(dR * .78)}" class="cw-disc-in"/>
     <path d="${cal}" class="cw-caliper"/>
-    <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(r)}" class="cw-rim"/>
-    ${spokes}
-    <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(r * .95)}" class="cw-lip"/>
-    <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(r * .2)}" class="cw-hub"/>
+    <g class="cw-rot">
+      <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(R * .985)}" class="cw-tyre-w"/>
+      <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(r)}" class="cw-rim"/>
+      ${spokes}
+      <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(r * .95)}" class="cw-lip"/>
+      <circle cx="${f(cx)}" cy="${f(g.wcY)}" r="${f(r * .2)}" class="cw-hub"/>
+    </g>
   </g>`;
 }
 
@@ -391,6 +394,7 @@ export function carSVG(c, opt = {}){
   const glass = opt.glass || c.glass;
   const a = c.aero || {};
   const path = bodyPath(c, g);
+  const nR2 = 16;
 
   /* ---- Aerodinámica --------------------------------------------------- */
   let aero = '';
@@ -448,7 +452,8 @@ export function carSVG(c, opt = {}){
     <rect x="${f(h1)}" y="${f(hY(h1))}" width="${f(mm(170))}" height="${f(mm(32))}" rx="3" class="c-chrome"/>
     ${cutB ? `<rect x="${f(cutB - mm(280))}" y="${f(hY(cutB - mm(280)))}" width="${f(mm(160))}" height="${f(mm(30))}" rx="3" class="c-chrome"/>` : ''}
     <path d="M${f(gl.dloF - mm(130))} ${f(beltAt(g, gl.dloF) - mm(24))} l${f(mm(-140))} ${f(mm(-52))} q${f(mm(-76))} ${f(mm(14))} ${f(mm(-52))} ${f(mm(92))} Z" class="c-mirror"/>
-    <path d="M${f(g.x0 + mm(24))} ${f(g.noseTopY + mm(52))} l${f(mm(190))} ${f(mm(-14))} l${f(mm(4))} ${f(mm(64))} l${f(mm(-192))} ${f(mm(16))} Z" class="c-light"/>
+    <path d="M${f(g.x0 + mm(14))} ${f(g.noseTopY + mm(40))} l${f(mm(180))} ${f(mm(-12))} l${f(mm(6))} ${f(mm(76))} l${f(mm(-186))} ${f(mm(16))} Z" class="c-light"/>
+    <path d="M${f(g.x0 + mm(14))} ${f(g.noseTopY + mm(40))} l${f(mm(180))} ${f(mm(-12))}" class="c-lightEdge"/>
     <path d="M${f(g.x1 - mm(28))} ${f(g.tailTopY + mm(74))} l${f(mm(-196))} ${f(mm(14))} l${f(mm(-3))} ${f(mm(70))} l${f(mm(200))} ${f(mm(-12))} Z" class="c-light c-light--rear"/>
     <rect x="${f(g.x1 - mm(400))}" y="${f(exY1)}" width="${f(mm(140))}" height="${f(mm(58))}" rx="5" class="c-exhaust"/>
     <rect x="${f(g.x1 - mm(220))}" y="${f(exY2)}" width="${f(mm(140))}" height="${f(mm(58))}" rx="5" class="c-exhaust"/>
@@ -499,8 +504,8 @@ export function carSVG(c, opt = {}){
       <stop offset="0" stop-color="#fff" stop-opacity=".26"/>
       <stop offset=".30" stop-color="#fff" stop-opacity=".05"/>
       <stop offset=".55" stop-color="#000" stop-opacity=".05"/>
-      <stop offset=".88" stop-color="#000" stop-opacity=".34"/>
-      <stop offset="1" stop-color="#000" stop-opacity=".52"/>
+      <stop offset=".88" stop-color="#000" stop-opacity=".20"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".32"/>
     </linearGradient>
     <linearGradient id="${uid}-b" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#fff" stop-opacity=".0"/>
@@ -527,8 +532,9 @@ export function carSVG(c, opt = {}){
   <path d="${path}" class="c-body"/>
   <g clip-path="url(#${uid}-c)">
     <path d="${path}" fill="url(#${uid}-a)"/>
-    <path d="M${f(g.x0)} ${f(beltAt(g, g.x0) + mm(200))} L${f(g.x1)} ${f(beltAt(g, g.x1) + mm(90))} L${f(g.x1)} ${f(beltAt(g, g.x1) + mm(190))} L${f(g.x0)} ${f(beltAt(g, g.x0) + mm(320))} Z" fill="url(#${uid}-b)" opacity=".5"/>
-    <path d="M${f(g.x0)} ${f(g.sillY - mm(210))} L${f(g.x1)} ${f(g.sillY - mm(160))} L${f(g.x1)} ${f(g.sillY + mm(60))} L${f(g.x0)} ${f(g.sillY + mm(60))} Z" fill="#000" opacity=".34"/>
+    <path d="M${f(g.x0)} ${f(beltAt(g, g.x0) + mm(150))} L${f(g.x1)} ${f(beltAt(g, g.x1) + mm(60))} L${f(g.x1)} ${f(beltAt(g, g.x1) + mm(110))} L${f(g.x0)} ${f(beltAt(g, g.x0) + mm(206))} Z" fill="url(#${uid}-b)" opacity=".85"/>
+    <path d="M${f(g.x0)} ${f(beltAt(g, g.x0) + mm(214))} L${f(g.x1)} ${f(beltAt(g, g.x1) + mm(118))} L${f(g.x1)} ${f(beltAt(g, g.x1) + mm(150))} L${f(g.x0)} ${f(beltAt(g, g.x0) + mm(250))} Z" fill="url(#${uid}-b)" opacity=".3"/>
+    <path d="M${f(g.x0)} ${f(g.sillY - mm(210))} L${f(g.x1)} ${f(g.sillY - mm(160))} L${f(g.x1)} ${f(g.sillY + mm(60))} L${f(g.x0)} ${f(g.sillY + mm(60))} Z" fill="#000" opacity=".2"/>
     ${stripes}
   </g>
   <g class="c-glass">
@@ -546,6 +552,7 @@ export function carSVG(c, opt = {}){
   ${archLip(c, g, g.fAx, g.archFR)}
   ${archLip(c, g, g.rAx, g.archRR)}
   <path d="${path}" class="c-outline"/>
+  <path d="M${f(g.x0 + nR2)} ${f(g.noseTopY)} C${f(g.x0 + (g.cowlX - g.x0) * .45)} ${f(g.noseTopY - mm(24))} ${f(g.cowlX - mm(340))} ${f(g.hoodY - mm(10))} ${f(g.cowlX)} ${f(g.hoodY)} Q${f(g.cowlX + (g.roofFX - g.cowlX) * c.wsRake)} ${f(g.hoodY - (g.hoodY - g.roofY) * (1 - c.wsRake * .34))} ${f(g.roofFX)} ${f(g.roofY)} Q${f((g.roofFX + g.roofRX) / 2)} ${f(g.roofY - g.crown)} ${f(g.roofRX)} ${f(g.roofY)}" class="c-rim"/>
   ${dims}
 </svg>`;
 }

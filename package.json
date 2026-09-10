@@ -7,6 +7,14 @@
     "dev": "npx --yes http-server -p 4173 -c-1 .",
     "start": "npx --yes http-server -p 4173 -c-1 ."
   },
-  "keywords": ["bmw", "tuning", "webgl", "svg", "webaudio", "static-site"],
-  "license": "UNLICENSED"
+  "keywords": [
+    "bmw",
+    "tuning",
+    "webgl",
+    "svg",
+    "webaudio",
+    "static-site"
+  ],
+  "license": "UNLICENSED",
+  "type": "module"
 }

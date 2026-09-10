@@ -135,6 +135,35 @@ export class Dyno {
     requestAnimationFrame(step);
   }
 
+  /* Pasada de banco: la curva se dibuja al ritmo del motor subiendo de vueltas */
+  run(dur = 4200, onTick){
+    if (this.running) return Promise.resolve();
+    this.running = true;
+    this.live = true;
+    this.progress = 0;
+    const t0 = performance.now();
+    return new Promise(resolve => {
+      const step = now => {
+        const t = clamp((now - t0) / dur, 0, 1);
+        // Aceleración realista: rápida abajo, más lenta arriba
+        this.progress = 1 - Math.pow(1 - t, 1.65);
+        this.draw();
+        if (onTick){
+          const pts = this.curves.tuned.pts;
+          const i = clamp(Math.floor(pts.length * this.progress), 0, pts.length - 1);
+          onTick(pts[i], this.progress);
+        }
+        if (t < 1) requestAnimationFrame(step);
+        else {
+          this.live = false; this.running = false; this.progress = 1;
+          this.draw();
+          resolve();
+        }
+      };
+      requestAnimationFrame(step);
+    });
+  }
+
   css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 
   draw(){
@@ -243,8 +272,33 @@ export class Dyno {
       mark(tuned.peakT.r, tuned.peakT.v, YT, data, `${fmt(tuned.peakT.v)} NM @ ${fmt(tuned.peakT.r)}`, cerca ? 20 : 0);
     }
 
+    /* --- Cabeza luminosa durante la pasada --- */
+    if (this.live && this.progress > .02){
+      const pts = tuned.pts;
+      const i = clamp(Math.floor(pts.length * this.progress), 0, pts.length - 1);
+      const p = pts[i];
+      const x = X(p.r);
+      ctx.save();
+      ctx.strokeStyle = hot; ctx.globalAlpha = .45; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + gh); ctx.stroke();
+      ctx.globalAlpha = 1;
+      [[YP(p.p), hot], [YT(p.t), data]].forEach(([y, c]) => {
+        ctx.shadowColor = c; ctx.shadowBlur = 16;
+        ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = c; ctx.fill();
+      });
+      ctx.restore();
+      ctx.font = '700 11px "JetBrains Mono", monospace';
+      ctx.textAlign = x > pad.l + gw * .6 ? 'right' : 'left';
+      ctx.textBaseline = 'top';
+      const ox = x + (x > pad.l + gw * .6 ? -10 : 10);
+      ctx.fillStyle = fg; ctx.fillText(`${fmt(p.r)} RPM`, ox, pad.t + 4);
+      ctx.fillStyle = hot; ctx.fillText(`${fmt(p.p)} CV`, ox, pad.t + 18);
+      ctx.fillStyle = data; ctx.fillText(`${fmt(p.t)} NM`, ox, pad.t + 32);
+    }
+
     /* --- Cursor de lectura --- */
-    if (this.hover !== null && this.hover > pad.l && this.hover < pad.l + gw){
+    if (!this.live && this.hover !== null && this.hover > pad.l && this.hover < pad.l + gw){
       const rpm = 800 + ((this.hover - pad.l) / gw) * (this.rpmMax - 800);
       const near = arr => arr.reduce((a, b) => Math.abs(b.r - rpm) < Math.abs(a.r - rpm) ? b : a);
       const pt = near(tuned.pts), ps = near(stock.pts);

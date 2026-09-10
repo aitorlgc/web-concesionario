@@ -20,6 +20,14 @@
 <link rel="stylesheet" href="assets/css/components.css">
 <link rel="stylesheet" href="assets/css/car.css">
 <link rel="stylesheet" href="assets/css/sections.css">
+<script>
+  // Aplica el tema antes de pintar para evitar el parpadeo
+  try{
+    var t = JSON.parse(localStorage.getItem('hm-theme'));
+    if (t === 'dia') document.documentElement.setAttribute('data-theme','dia');
+    if (sessionStorage.getItem('hm-wipe') === '1') document.documentElement.dataset.wipeIn = '1';
+  }catch(e){}
+</script>
 </head>
 <body>
 
@@ -310,6 +318,16 @@
           <select class="select" id="banco-car"></select>
         </div>
         <div class="banco__stages" role="tablist" aria-label="Etapa de preparación" id="banco-stages"></div>
+        <button class="btn btn--sm banco__run" id="banco-run" type="button" data-cursor="Lanzar">
+          Lanzar pasada
+          <svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 4l14 8-14 8z"/></svg>
+        </button>
+      </div>
+
+      <div class="banco__live" id="banco-live" aria-live="off" hidden>
+        <span class="banco__liveRpm"><b>0</b><i>rpm</i></span>
+        <span class="banco__liveBar"><i></i></span>
+        <span class="banco__liveCv"><b>0</b><i>CV</i></span>
       </div>
 
       <div class="banco__chart">

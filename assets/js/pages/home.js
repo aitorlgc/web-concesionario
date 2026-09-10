@@ -23,7 +23,10 @@ export function initHome(app){
   testimonios();
   initTimeline();
   app.hero = initHeroGL($('.hero__gl'));
-  on(document, 'hm:rev', () => app.hero?.rev(1));
+  on(document, 'hm:rev', e => {
+    app.hero?.rev(1);
+    rodar($('#heroCar .carsvg'), e.detail);
+  });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -36,6 +39,24 @@ function heroCar(){
   }
   const meta = $('#heroMeta');
   if (meta) meta.textContent = `En pantalla · ${car.name} ${car.chassis} · ${car.engine} · ${car.stockHp} → ${car.tuneHp} CV`;
+}
+
+/* Hace rodar las ruedas del dibujo al ritmo del aceleronazo */
+function rodar(svg, { up = .85, down = 1.25 } = {}){
+  if (!svg) return;
+  clearTimeout(rodar._t);
+  svg.classList.add('is-rolling');
+  const total = (up + down) * 1000;
+  const t0 = performance.now();
+  const tick = now => {
+    const t = (now - t0) / total;
+    if (t >= 1){ svg.classList.remove('is-rolling'); return; }
+    // Sube de vueltas y baja igual que el sonido
+    const v = t < up / (up + down) ? t / (up / (up + down)) : 1 - (t - up / (up + down)) / (down / (up + down));
+    svg.style.setProperty('--spin', `${(0.85 - v * 0.72).toFixed(3)}s`);
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -143,6 +164,31 @@ function banco(){
     $$('button', tabs).forEach(x => x.setAttribute('aria-selected', String(x === b)));
     render();
     rev({ peak:5600 + stage * 900, up:.55, down:.9, gain:.3 });
+  });
+
+  /* --- Pasada de banco en directo --------------------------------------- */
+  const runBtn = $('#banco-run');
+  const live = $('#banco-live');
+  on(runBtn, 'click', async () => {
+    if (dyno.running) return;
+    const r = CARS_BY_ID[sel.value];
+    const turbo = /turbo/i.test(r.engine);
+    const redline = turbo ? 7200 : (r.stockHp > 400 ? 8400 : 7800);
+    runBtn.disabled = true;
+    live.hidden = false;
+    live.setAttribute('aria-live', 'polite');
+    rev({ peak:redline, idle:1100, up:4.2, down:1.4, gain:.42 });
+    const rpmEl = live.querySelector('.banco__liveRpm b');
+    const cvEl  = live.querySelector('.banco__liveCv b');
+    const barEl = live.querySelector('.banco__liveBar i');
+    await dyno.run(4200, (p, t) => {
+      rpmEl.textContent = fmt(p.r);
+      cvEl.textContent = fmt(p.p);
+      barEl.style.transform = `scaleX(${t})`;
+      live.classList.toggle('is-red', p.r > redline * .88);
+    });
+    runBtn.disabled = false;
+    setTimeout(() => { live.hidden = true; live.classList.remove('is-red'); }, 2600);
   });
 
   // Anima la primera vez que entra en pantalla

@@ -2,6 +2,7 @@
    PRECARGA — cuenta de 000 a 100 con lectura de sistemas
    ========================================================================== */
 import { $, reducedMotion } from '../lib/util.js';
+import { isReturning } from './transition.js';
 
 const LINEAS = [
   'CENTRALITA', 'BANCO DE RODILLOS', 'SONDAS LAMBDA', 'PRESIÓN DE SOPLADO', 'LISTO'
@@ -26,11 +27,12 @@ export function initPreloader(){
       resolve();
     };
 
-    if (reducedMotion()){
+    if (reducedMotion() || isReturning()){
       pct.textContent = '100';
       bar.style.transform = 'scaleX(1)';
       spans.forEach(s => s.style.color = 'var(--signal)');
-      setTimeout(finish, 260);
+      el.style.transitionDuration = '.45s';
+      setTimeout(finish, 60);
       return;
     }
 

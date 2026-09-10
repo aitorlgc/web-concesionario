@@ -88,6 +88,20 @@ export function initConfigurador(){
     toast('Configuración reiniciada');
   });
   on($('#cfg-copy'), 'click', copiar);
+  const runBtn = $('#cfg-run');
+  on(runBtn, 'click', async () => {
+    if (dyno.running) return;
+    const r = calc();
+    runBtn.disabled = true;
+    rev({ peak:r.rpmMax, idle:1100, up:3.6, down:1.3, gain:.4 });
+    const art = $('#cfg-car .carsvg');
+    art?.classList.add('is-rolling');
+    await dyno.run(3600, (pt, t) => {
+      if (art) art.style.setProperty('--spin', `${(0.9 - t * 0.74).toFixed(3)}s`);
+    });
+    setTimeout(() => art?.classList.remove('is-rolling'), 900);
+    runBtn.disabled = false;
+  });
   on($('#cfg-send'), 'click', () => {
     store.set('hm-cita', resumen());
     toast('Configuración guardada — abriendo el formulario de cita', 'ok');
