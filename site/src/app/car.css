@@ -1,0 +1,37 @@
+/* Estilo de los perfiles SVG (ver src/lib/car-art.ts) */
+.carsvg { width: 100%; height: auto; overflow: visible; display: block; }
+.carsvg {
+  /* Estudio oscuro: la chapa en penumbra, los perfiles iluminados con el color de la pintura */
+  --paint-deep: color-mix(in oklab, var(--car-body) 42%, #09090a);
+  --paint-lit: color-mix(in oklab, var(--car-body) 70%, #fff4e6);
+}
+.carsvg .c-body { fill: var(--paint-deep); }
+.carsvg .c-body-2 { fill: var(--paint-deep); }
+.carsvg .c-outline { fill: none; stroke: color-mix(in oklab, var(--car-body) 55%, transparent); stroke-width: 1.2; stroke-linejoin: round; }
+.carsvg .c-sheen { fill: none; stroke: var(--paint-lit); stroke-width: 2.2; stroke-linecap: round; }
+.carsvg .c-glass path { fill: var(--car-glass); stroke: rgba(0, 0, 0, 0.45); stroke-width: 1; }
+.carsvg .c-line { fill: none; stroke: rgba(0, 0, 0, 0.42); stroke-width: 1.5; stroke-linecap: round; }
+.carsvg .c-line--soft { stroke: rgba(0, 0, 0, 0.2); stroke-width: 1.2; }
+.carsvg .c-chrome { fill: rgba(0, 0, 0, 0.42); }
+.carsvg .c-mirror { fill: var(--paint-deep); stroke: rgba(0, 0, 0, 0.5); stroke-width: 1.2; stroke-linejoin: round; }
+.carsvg .c-light { fill: rgba(240, 236, 228, 0.92); stroke: rgba(0, 0, 0, 0.5); stroke-width: 1.1; }
+.carsvg .c-light--rear { fill: #b3261e; }
+.carsvg .c-lightEdge { fill: none; stroke: rgba(255, 255, 255, 0.9); stroke-width: 2; stroke-linecap: round; }
+.carsvg .c-exhaust { fill: #22252b; stroke: rgba(255, 255, 255, 0.2); stroke-width: 1.2; }
+.carsvg .c-aero { fill: #121417; }
+.carsvg .c-grille { fill: #0f1114; stroke: rgba(255, 255, 255, 0.14); stroke-width: 1.1; }
+.carsvg .c-grille-bar { stroke: rgba(255, 255, 255, 0.22); stroke-width: 1.2; }
+.carsvg .c-arch { fill: none; stroke: rgba(0, 0, 0, 0.5); stroke-linecap: round; }
+
+.carsvg .cw-tyre { fill: #0c0d10; stroke: #2a2d33; stroke-width: 2.2; }
+.carsvg .cw-disc { fill: #474b52; }
+.carsvg .cw-rim { fill: #2b2e33; }
+.carsvg .cw-lip { fill: none; stroke: #d8c3a0; stroke-width: 2.4; }
+.carsvg .cw-hub { fill: #17191c; }
+.carsvg .cw-spoke { fill: #a9a59c; }
+.carsvg .cw-spoke-l { stroke: #a9a59c; stroke-linecap: round; fill: none; }
+.carsvg .cw-mesh { fill: none; stroke: #8f8b83; stroke-width: 1.6; }
+
+/* Las llantas giran alrededor de su propio centro */
+.carsvg .cw-rot { transform-box: fill-box; transform-origin: center; }
+.carsvg .c-shoulder { fill: none; stroke: var(--paint-lit); stroke-width: 1.4; stroke-linecap: round; opacity: 0.55; }

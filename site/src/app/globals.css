@@ -1,0 +1,117 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./car.css";
+
+/* ---------------------------------------------------------------
+   HIGH CARS — tokens
+   Carbono de fondo, verde Isle of Man para superficies,
+   naranja Hyper sólo para la acción, champán para el detalle.
+   --------------------------------------------------------------- */
+:root {
+  --background: #0e0e10;
+  --foreground: #f2eee8;
+  --surface: #15392f;
+  --surface-deep: #0f2921;
+  --card: #151517;
+  --card-foreground: #f2eee8;
+  --muted: #1c1c1f;
+  --muted-foreground: #a8a39a;
+  --primary: #ff6b1a;
+  --primary-foreground: #140a04;
+  --accent: #d8c3a0;
+  --accent-foreground: #0e0e10;
+  --border: rgba(242, 238, 232, 0.12);
+  --input: rgba(242, 238, 232, 0.18);
+  --ring: #ff6b1a;
+  --radius: 0.375rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-deep: var(--surface-deep);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
+  --font-display: var(--font-archivo);
+  --font-body: var(--font-instrument-sans);
+  --font-serif: var(--font-instrument-serif);
+}
+
+@theme {
+  --text-fluid-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-fluid-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --text-fluid-lg: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
+  --text-fluid-xl: clamp(1.75rem, 1.2rem + 2.75vw, 3rem);
+  --text-fluid-2xl: clamp(2.25rem, 1.5rem + 3.75vw, 4.5rem);
+  --text-fluid-section: clamp(1.7rem, 1.1rem + 2.7vw, 3.6rem);
+  --text-fluid-hero: clamp(2.6rem, 0.4rem + 6.6vw, 7.25rem);
+
+  --spacing-section: clamp(5rem, 10vw, 10rem);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/60; }
+  html { color-scheme: dark; }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    font-size: var(--text-fluid-base);
+  }
+  ::selection { background: var(--primary); color: var(--primary-foreground); }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+}
+
+@utility font-wide {
+  font-family: var(--font-archivo);
+  font-stretch: 125%;
+  font-variation-settings: "wdth" 125;
+}
+
+@utility eyebrow {
+  font-family: var(--font-archivo);
+  font-stretch: 112%;
+  font-variation-settings: "wdth" 112;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Grano de película sobre todo el sitio: da textura al negro */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Carril horizontal del stock */
+.rail { scrollbar-width: none; }
+.rail::-webkit-scrollbar { display: none; }
+
+/* Ruedas en marcha (hero y tarjetas) */
+@keyframes wheel-spin { to { transform: rotate(360deg); } }
+.is-rolling .cw-rot { animation: wheel-spin var(--spin, 0.5s) linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .is-rolling .cw-rot { animation: none; }
+}
