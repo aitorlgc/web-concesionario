@@ -3,3 +3,19 @@ node_modules/
 *.log
 .vscode/
 .idea/
+
+# claude-webkit (la web generada en site/ sí se versiona)
+.env
+.env.local
+.env.production
+.env.development
+.vercel/
+.next/
+out/
+npm-debug.log*
+playwright-cli-screenshots/
+plans/
+prototypes/
+__pycache__/
+*.pyc
+.claude/settings.local.json
