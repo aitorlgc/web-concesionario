@@ -23,7 +23,7 @@ export type Car = {
   shape: CarShape;
 };
 
-/* Cotas de partida: BMW M4 (G82) y M3 (G80), tomadas del catálogo de HOFMEISTER.
+/* Cotas de partida: BMW M4 (G82) y M3 (G80).
    El resto de coches se derivan de ellas con sus medidas reales. */
 const coupe: CarShape = {
   L: 4794, H: 1393, WB: 2857, FO: 890, WD: 700,

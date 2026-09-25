@@ -1,5 +1,5 @@
 /* Perfiles de coche dibujados por código.
-   Adaptado del generador paramétrico de HOFMEISTER (assets/js/data/car-art.js):
+   Generador paramétrico:
    cada coche se describe con cotas reales en milímetros y el generador devuelve
    el SVG completo. Aquí se amplía a varias marcas (frontal, pliegue, franjas). */
 

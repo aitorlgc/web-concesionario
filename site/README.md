@@ -10,7 +10,7 @@ npm run build
 ```
 
 - `src/lib/stock.ts`: los coches (precio, km, frase del asesor, cotas para el dibujo).
-- `src/lib/car-art.ts`: dibuja cada coche en SVG a partir de sus medidas (adaptado de HOFMEISTER).
+- `src/lib/car-art.ts`: dibuja cada coche en SVG a partir de sus medidas.
 - `src/lib/recomendar.ts`: la lógica del asesor "¿Qué coche va contigo?".
 
 Pendiente antes de publicar (buscar `TODO`): teléfono, WhatsApp y email reales, redes sociales,
